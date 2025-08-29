@@ -1,82 +1,71 @@
--- 1. Reuse your ~/.vimrc so you keep all old settings
-vim.cmd("source " .. vim.fn.expand("~/.vimrc"))
+-- ===== Basic Options =====
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.signcolumn = "yes"
+vim.opt.background = "dark"
+vim.opt.termguicolors = false
+vim.cmd([[
+  syntax enable
+  filetype plugin indent on
+  colorscheme desert
+]])
 
-
--- 3. Bootstrap lazy.nvim plugin manager
+-- ===== Bootstrap lazy.nvim =====
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git","clone","--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", lazypath,
-  })
+  vim.fn.system({ "git","clone","--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git","--branch=stable", lazypath })
 end
 vim.opt.rtp:prepend(lazypath)
 
-
--- 3. Bootstrap lazy.nvim plugin manager
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git","clone","--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", lazypath,
-  })
-end
-vim.opt.rtp:prepend(lazypath)
-
-
--- 4. Plugins
+-- ===== Plugins =====
 require("lazy").setup({
-  -- Treesitter for highlighting
-  { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
-
-  -- LSP support
   { "neovim/nvim-lspconfig" },
-  { "williamboman/mason.nvim" },            -- installer for language servers
-  { "williamboman/mason-lspconfig.nvim" },  -- bridges mason + lspconfig
+  { "williamboman/mason.nvim" },
+  { "williamboman/mason-lspconfig.nvim" },
 
-  -- Autocompletion
-  { "hrsh7th/nvim-cmp" },           -- completion engine
-  { "hrsh7th/cmp-nvim-lsp" },       -- LSP source for nvim-cmp
-  { "L3MON4D3/LuaSnip" },           -- snippet engine
-  { "saadparwaiz1/cmp_luasnip" },   -- snippet completions
+  { "hrsh7th/nvim-cmp" },
+  { "hrsh7th/cmp-nvim-lsp" },
+  { "L3MON4D3/LuaSnip" },
+  { "saadparwaiz1/cmp_luasnip" },
 })
 
--- 5. Treesitter config
-require("nvim-treesitter.configs").setup({
-  ensure_installed = { "python", "lua", "vim", "bash", "json", "markdown" },
-  highlight = { enable = true },
-  indent = { enable = true },
-})
-
--- 6. Mason (server manager) + LSP setup
+-- ===== Mason (LSP installer) =====
 require("mason").setup()
 require("mason-lspconfig").setup({
-  ensure_installed = { "pyright" },  -- Python LSP
-  automatic_installation = true,
+  ensure_installed = { "pyright", "lua_ls" }, -- add more if needed
 })
 
--- LSP attach: keymaps
+-- ===== LSP setup =====
+local caps = require("cmp_nvim_lsp").default_capabilities()
 local on_attach = function(_, bufnr)
-  local map = function(mode, lhs, rhs)
-    vim.keymap.set(mode, lhs, rhs, { buffer = bufnr })
+  local map = function(m, lhs, rhs)
+    vim.keymap.set(m, lhs, rhs, { buffer = bufnr })
   end
   map("n", "gd", vim.lsp.buf.definition)
+  map("n", "K",  vim.lsp.buf.hover)
   map("n", "gr", vim.lsp.buf.references)
-  map("n", "K", vim.lsp.buf.hover)
   map("n", "<leader>rn", vim.lsp.buf.rename)
-  map("n", "<leader>ca", vim.lsp.buf.code_action)
-  map("n", "[d", vim.diagnostic.goto_prev)
-  map("n", "]d", vim.diagnostic.goto_next)
 end
 
--- Configure Python LSP (pyright)
+-- Python (Pyright)
 require("lspconfig").pyright.setup({
   on_attach = on_attach,
+  capabilities = caps,
 })
 
--- 7. Autocomplete setup
+-- Lua (sumneko / lua-language-server)
+require("lspconfig").lua_ls.setup({
+  on_attach = on_attach,
+  capabilities = caps,
+  settings = {
+    Lua = {
+      diagnostics = { globals = { "vim" } },
+    },
+  },
+})
+
+-- ===== nvim-cmp setup =====
 local cmp = require("cmp")
 cmp.setup({
   snippet = {
@@ -84,10 +73,10 @@ cmp.setup({
   },
   mapping = cmp.mapping.preset.insert({
     ["<C-Space>"] = cmp.mapping.complete(),
-    ["<CR>"] = cmp.mapping.confirm({ select = true }),
+    ["<CR>"]      = cmp.mapping.confirm({ select = true }),
   }),
-  sources = cmp.config.sources({
+  sources = {
     { name = "nvim_lsp" },
     { name = "luasnip" },
-  }),
+  },
 })
