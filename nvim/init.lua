@@ -33,7 +33,7 @@ require("lazy").setup({
 -- ===== Mason (LSP installer) =====
 require("mason").setup()
 require("mason-lspconfig").setup({
-  ensure_installed = { "pyright", "lua_ls", "tsserver" }, 
+  ensure_installed = { "pyright", "lua_ls", "ts_ls" }, 
 })
 
 -- ===== LSP setup =====
@@ -66,7 +66,7 @@ require("lspconfig").lua_ls.setup({
 })
 
 -- TypeScript / JavaScript
-require("lspconfig").tsserver.setup({
+require("lspconfig").ts_ls.setup({
   on_attach = on_attach,
   capabilities = caps,
 })
