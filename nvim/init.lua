@@ -33,7 +33,7 @@ require("lazy").setup({
 -- ===== Mason (LSP installer) =====
 require("mason").setup()
 require("mason-lspconfig").setup({
-  ensure_installed = { "pyright", "lua_ls" }, -- add more if needed
+  ensure_installed = { "pyright", "lua_ls", "tsserver" }, 
 })
 
 -- ===== LSP setup =====
@@ -63,6 +63,12 @@ require("lspconfig").lua_ls.setup({
       diagnostics = { globals = { "vim" } },
     },
   },
+})
+
+-- TypeScript / JavaScript
+require("lspconfig").tsserver.setup({
+  on_attach = on_attach,
+  capabilities = caps,
 })
 
 -- ===== nvim-cmp setup =====
