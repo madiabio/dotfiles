@@ -9,6 +9,12 @@ vim.cmd([[
   filetype plugin indent on
   colorscheme desert
 ]])
+vim.diagnostic.config({
+  virtual_text = true,  -- show error messages inline
+  signs = true,         -- show signs in the gutter
+  underline = true,     -- underline problems
+  update_in_insert = false,
+})
 
 -- ===== Bootstrap lazy.nvim =====
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
