@@ -5,8 +5,7 @@ vim.opt.signcolumn = "yes"
 vim.opt.background = "dark"
 vim.opt.termguicolors = false
 vim.cmd([[
-  syntax enable
-  filetype plugin indent on
+  filetype plugin on
   colorscheme desert
 ]])
 vim.diagnostic.config({
@@ -30,12 +29,27 @@ require("lazy").setup({
   { "williamboman/mason.nvim" },
   { "williamboman/mason-lspconfig.nvim" },
 
+  {
+    "Darazaki/indent-o-matic",
+    lazy = false,
+    config = function()
+      require("indent-o-matic").setup({
+        max_lines = 200,
+        standard_widths = { 2, 4, 8 },
+        default_indent = {
+          typescript = 2,
+          lua = 2,
+          python = 4,
+        },
+      })
+    end,
+  },
+
   { "hrsh7th/nvim-cmp" },
   { "hrsh7th/cmp-nvim-lsp" },
   { "L3MON4D3/LuaSnip" },
   { "saadparwaiz1/cmp_luasnip" },
 })
-
 -- ===== Mason (LSP installer) =====
 require("mason").setup()
 require("mason-lspconfig").setup({
