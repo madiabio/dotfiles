@@ -48,6 +48,12 @@ require("lazy").setup({
   { "hrsh7th/cmp-nvim-lsp" },
   { "L3MON4D3/LuaSnip" },
   { "saadparwaiz1/cmp_luasnip" },
+
+  {
+    "coder/claudecode.nvim",
+    dependencies = { "folke/snacks.nvim" },
+    config = true,
+  },
 })
 -- ===== Mason (LSP installer) =====
 require("mason").setup()
@@ -105,3 +111,8 @@ cmp.setup({
     { name = "luasnip" },
   },
 })
+
+-- ===== Claude Code keymaps =====
+vim.keymap.set("n", "<leader>cc", "<cmd>ClaudeCode<cr>", { desc = "Open Claude Code" })
+vim.keymap.set("v", "<leader>cs", "<cmd>ClaudeCodeSelection<cr>", { desc = "Send selection to Claude" })
+vim.keymap.set("n", "<leader>cf", "<cmd>ClaudeCodeFile<cr>", { desc = "Send current file to Claude" })
