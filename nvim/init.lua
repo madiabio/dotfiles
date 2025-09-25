@@ -54,6 +54,34 @@ require("lazy").setup({
     dependencies = { "folke/snacks.nvim" },
     config = true,
   },
+
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        ensure_installed = { "lua", "python", "javascript", "typescript", "html", "css" },
+        highlight = { enable = true },
+        indent = { enable = true },
+      })
+    end,
+  },
+
+  {
+    "wellle/context.vim",
+    config = function()
+      vim.g.context_enabled = 1
+      vim.g.context_max_height = 5
+      vim.g.context_max_per_indent = 1
+
+      -- Disable context in terminal buffers
+      vim.api.nvim_create_autocmd("TermOpen", {
+        callback = function()
+          vim.b.context_enabled = 0
+        end,
+      })
+    end,
+  },
 })
 -- ===== Mason (LSP installer) =====
 require("mason").setup()
