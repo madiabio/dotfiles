@@ -1,4 +1,5 @@
 -- ===== Basic Options =====
+vim.opt.mouse = "a"
 vim.opt.number = true
 vim.opt.signcolumn = "yes"
 vim.opt.background = "dark"
