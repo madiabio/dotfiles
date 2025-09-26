@@ -1,5 +1,5 @@
 -- ===== Basic Options =====
-vim.opt.mouse = "a"
+vim.opt.mouse = "a" -- enable scrolling and changing sizes with mouse
 vim.opt.number = true
 vim.opt.signcolumn = "yes"
 vim.opt.background = "dark"
@@ -14,6 +14,7 @@ vim.diagnostic.config({
   underline = true,     -- underline problems
   update_in_insert = false,
 })
+vim.keymap.set('n', '<Esc>', ':nohlsearch<CR>', { noremap = true, silent = true }) -- clear highlighted search text with esc
 
 -- ===== Bootstrap lazy.nvim =====
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
