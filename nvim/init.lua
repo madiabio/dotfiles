@@ -15,7 +15,12 @@ vim.diagnostic.config({
   update_in_insert = false,
 })
 vim.keymap.set('n', '<Esc>', ':nohlsearch<CR>', { noremap = true, silent = true }) -- clear highlighted search text with esc
-
+vim.api.nvim_create_autocmd("FileType", { -- Turn on line numbers for netrw
+  pattern = "netrw",
+  callback = function()
+    vim.opt_local.number = true        -- absolute numbers
+  end,
+})
 -- ===== Bootstrap lazy.nvim =====
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
