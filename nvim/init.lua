@@ -3,10 +3,9 @@ vim.opt.mouse = "a" -- enable scrolling and changing sizes with mouse
 vim.opt.number = true
 vim.opt.signcolumn = "yes"
 vim.opt.background = "dark"
-vim.opt.termguicolors = false
+vim.opt.termguicolors = true
 vim.cmd([[
   filetype plugin on
-  colorscheme desert
 ]])
 vim.diagnostic.config({
   virtual_text = true,  -- show error messages inline
@@ -31,10 +30,12 @@ vim.opt.rtp:prepend(lazypath)
 
 -- ===== Plugins =====
 require("lazy").setup({
+  -- LSP
   { "neovim/nvim-lspconfig" },
   { "williamboman/mason.nvim" },
   { "williamboman/mason-lspconfig.nvim" },
 
+  -- Indentation Settings
   {
     "Darazaki/indent-o-matic",
     lazy = false,
@@ -51,17 +52,20 @@ require("lazy").setup({
     end,
   },
 
+  -- Completion
   { "hrsh7th/nvim-cmp" },
   { "hrsh7th/cmp-nvim-lsp" },
   { "L3MON4D3/LuaSnip" },
   { "saadparwaiz1/cmp_luasnip" },
 
+  -- Claude Integration
   {
     "coder/claudecode.nvim",
     dependencies = { "folke/snacks.nvim" },
     config = true,
   },
 
+  -- Fuzzy Finder
   {
     "nvim-telescope/telescope.nvim",
     tag = "0.1.8",
@@ -78,6 +82,7 @@ require("lazy").setup({
     end,
   },
 
+  -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
@@ -90,6 +95,23 @@ require("lazy").setup({
     end,
   },
 
+  -- Context Bar
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    config = function()
+      require("treesitter-context").setup({
+        enable = true,            -- enable this plugin
+        max_lines = 3,            -- max lines shown in the context window
+        min_window_height = 0,    -- disable if window too small
+        line_numbers = true,      -- show line numbers in context
+        multiline_threshold = 20, -- max lines per context
+        trim_scope = "outer",     -- which scope to trim when max_lines is exceeded
+        mode = "cursor",          -- "cursor" or "topline"
+        separator = nil,          -- e.g. "─" to put a line under context
+        zindex = 20,              -- control overlay priority
+      })
+    end,
+  },
 
   -- Gruvbox (Lua)
   {
@@ -109,7 +131,7 @@ require("lazy").setup({
 -- ===== Mason (LSP installer) =====
 require("mason").setup()
 require("mason-lspconfig").setup({
-  ensure_installed = { "pyright", "lua_ls", "ts_ls" }, 
+  ensure_installed = { "pyright", "lua_ls", "ts_ls" },
 })
 
 -- ===== LSP setup =====
