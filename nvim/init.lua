@@ -104,10 +104,9 @@ require("lazy").setup({
         max_lines = 3,            -- max lines shown in the context window
         min_window_height = 0,    -- disable if window too small
         line_numbers = true,      -- show line numbers in context
-        multiline_threshold = 20, -- max lines per context
         trim_scope = "outer",     -- which scope to trim when max_lines is exceeded
-        mode = "cursor",          -- "cursor" or "topline"
-        separator = nil,          -- e.g. "─" to put a line under context
+        mode = "topline",          -- "cursor" or "topline"
+        separator = "-",          -- e.g. "─" to put a line under context
         zindex = 20,              -- control overlay priority
       })
     end,
@@ -199,3 +198,7 @@ end, { desc = 'Fuzzy search in current file' })
 vim.keymap.set("n", "<leader>cc", "<cmd>ClaudeCode<cr>", { desc = "Open Claude Code" })
 vim.keymap.set("v", "<leader>cs", "<cmd>ClaudeCodeSelection<cr>", { desc = "Send selection to Claude" })
 vim.keymap.set("n", "<leader>cf", "<cmd>ClaudeCodeFile<cr>", { desc = "Send current file to Claude" })
+
+-- ===== Context Bar Colouring ===
+vim.api.nvim_set_hl(0, "TreesitterContext", { bg = "#282828", fg = "#ebdbb2", bold = true })
+vim.api.nvim_set_hl(0, "TreesitterContextSeparator", { fg = "#d79921" }) -- bright yellow/gold border
