@@ -85,26 +85,26 @@ require("lazy").setup({
       require("nvim-treesitter.configs").setup({
         ensure_installed = { "lua", "python", "javascript", "typescript", "html", "css" },
         highlight = { enable = true },
-        indent = { enable = true },
+        indent = { enable = false },
       })
     end,
   },
 
+
+  -- Gruvbox (Lua)
   {
-    "wellle/context.vim",
+    "ellisonleao/gruvbox.nvim",
+    priority = 1000,
     config = function()
-      vim.g.context_enabled = 1
-      vim.g.context_max_height = 5
-      vim.g.context_max_per_indent = 1
-
-      -- Disable context in terminal buffers
-      vim.api.nvim_create_autocmd("TermOpen", {
-        callback = function()
-          vim.b.context_enabled = 0
-        end,
+      require("gruvbox").setup({
+        contrast = "hard", -- "soft", "medium" or "hard"
+        transparent_mode = false,
       })
+      vim.opt.termguicolors = true
+      vim.cmd.colorscheme("gruvbox")
     end,
   },
+
 })
 -- ===== Mason (LSP installer) =====
 require("mason").setup()
