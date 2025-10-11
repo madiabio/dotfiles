@@ -22,3 +22,8 @@ cdf() {
 gc() {
     git commit -m "$*"
 }
+
+# Git push shortcut
+gp() {
+    git push
+}
